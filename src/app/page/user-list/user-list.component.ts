@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/service/user.service';
 

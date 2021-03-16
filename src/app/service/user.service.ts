@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { User } from '../model/user';
 
 @Injectable({
@@ -55,7 +56,15 @@ export class UserService {
    * Create a user in the database.
    * The method is: this.http.post
    */
-
+  
+  create(user: User): void {
+    this.http.post<User>(
+      `${this.endpoint}`,
+      user
+    ).subscribe(
+      () => this.getAll()
+    );
+  }
 
 
   /**
@@ -63,4 +72,17 @@ export class UserService {
    * The method is: this.http.patch
    */
 
+   update(user: User): Observable<User> {
+    return this.http.patch<User>(
+      `${this.endpoint}/${user.id}`,
+      user
+    ).pipe(
+      tap(() => {
+        this.getAll();
+      })
+    );
+  }
+
 }
+
+

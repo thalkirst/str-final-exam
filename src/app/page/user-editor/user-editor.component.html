@@ -6,30 +6,27 @@
       <div class="form-group">
         <label>Name</label>
         <!-- Validation: min 8 char, max 40 char, required -->
-        <input
-        class="form-control"
-        type="text"
-        name="name"
-        [(ngModel)]="user.name">
+        <input class="form-control" type="text" name="name" [(ngModel)]="user.name" pattern=".{8,40}" required>
+        <div [hidden]="userForm.controls.name?.valid || userForm.controls.name?.pristine" class="error-message">
+          Name must be between 8-40 characters.
+        </div>
       </div>
       <div class="form-group">
         <label>Email</label>
         <!-- Validation: valid email, required.
           Help: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript -->
-          <input
-          class="form-control"
-          type="text"
-          name="email"
-          [(ngModel)]="user.email">
+        <input class="form-control" type="text" name="email" [(ngModel)]="user.email" [pattern]="emailpattern" required>
+        <div [hidden]="userForm.controls.email?.valid || userForm.controls.email?.pristine" class="error-message">
+          A valid e-mail address must be provided.
         </div>
-        <div class="form-group">
-          <label>Address</label>
-          <!-- Validation: min 8 char, max 100 char, required -->
-          <input
-          class="form-control"
-          type="text"
-          name="address"
-          [(ngModel)]="user.address">
+      </div>
+      <div class="form-group">
+        <label>Address</label>
+        <!-- Validation: min 8 char, max 100 char, required -->
+        <input class="form-control" type="text" name="address" [(ngModel)]="user.address" pattern=".{8,100}" required>
+        <div [hidden]="userForm.controls.address?.valid || userForm.controls.address?.pristine" class="error-message">
+          Address must be between 8-100 characters.
+        </div>
       </div>
       <div class="form-group">
         <label>Active</label>
@@ -39,7 +36,8 @@
           <option [ngValue]="false">inactive</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary btn-block mt-5">
+      <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary btn-block mt-5"
+        (click)="onUpdate(user)">
         <i class="fa fa-save"></i>
       </button>
     </form>
