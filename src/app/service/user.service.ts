@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../model/user';
 
 @Injectable({
@@ -18,8 +18,14 @@ export class UserService {
    * Get all users from the database.
    * @returns on observable with all users.
    */
-  getAll(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.endpoint}`);
+
+  list$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+
+  getAll(): void {
+    this.list$.next([]);
+    this.http.get<User[]>(this.endpoint).subscribe(
+      users => this.list$.next(users)
+    );
   }
 
   /**
@@ -36,6 +42,13 @@ export class UserService {
    * The method is: this.http.delete
    */
 
+   remove(user: User): void {
+    this.http.delete<User>(
+      `${this.endpoint}/${user.id}`
+    ).subscribe(
+      () => this.getAll()
+    );
+  }
 
 
   /**
